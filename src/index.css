@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import 'tailwindcss';
+
+/* Semantic tokens for the Indigo·Dusk system. Light-only by design. Same
+   token names and same roles as the CodeIT training portal — only the hue
+   moved, from teal to indigo — so every component reads identically.
+
+   The load-bearing rule is a split: steps 50–500 carry deep ink (#15183A),
+   steps 600–950 carry white / soft white (#EEF0FD). Nothing carries the
+   opposite. */
+:root {
+  color-scheme: light;
+
+  --app: #ffffff;
+  --panel: #ffffff;
+  /* The sidebar rail and the gutter the content card floats on. */
+  --shell: #ffffff;
+  /* The content card. Flat white, so a Card is separated from it by its
+     --line hairline alone. Give this a value that differs from --shell to
+     make the 26px content card visible. */
+  --canvas: #ffffff;
+
+  /* Neutrals, taken on-hue so greys sit in the same indigo family as the ramp. */
+  --surface: #f7f8fb;
+  --surface-2: #f2f3f9;
+  --line: #e7e9f2;
+  --line-soft: #eff0f7;
+
+  /* Ink is step 950 — 15.9:1 on white. */
+  --ink: #1c1f40;
+  /* Body copy at 5.9:1 on white. */
+  --muted: #5d6283;
+  /* Decorative and label-only, 2.9:1 on white — anything that *names* data
+     (stat labels, table headers) must use --muted instead. */
+  --faint: #9297b2;
+
+  /* Brand surface and its border. */
+  --tint: #f4f5fd;
+  --tint-line: #d1d5f6;
+
+  /* Always-dark surfaces (hero cards, invoice headers). Step 950. */
+  --deep: #1c1f40;
+  --deep-line: #3b4388;
+  /* Muted copy on a dark panel, 7.4:1 on --deep. */
+  --deep-muted: #a9aedd;
+
+  --on-brand-dark: #15183a;
+  --on-brand-light: #eef0fd;
+}
+
+@theme inline {
+  --font-sans: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+  /* The display face, worn only by the PageHeader title. */
+  --font-display: 'Manrope', 'Cairo', ui-sans-serif, system-ui, sans-serif;
+
+  --color-app: var(--app);
+  --color-panel: var(--panel);
+  --color-shell: var(--shell);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+
+  --color-tint: var(--tint);
+  --color-tint-line: var(--tint-line);
+
+  --color-deep: var(--deep);
+  --color-deep-line: var(--deep-line);
+  --color-deep-muted: var(--deep-muted);
+
+  --color-on-brand-dark: var(--on-brand-dark);
+  --color-on-brand-light: var(--on-brand-light);
+}
+
+@theme {
+  /* The Indigo·Dusk ramp, 50 → 950. The seed #8C95E4 is step 400.
+     Contrast against its paired text colour:
+
+       50  15.8:1 ink    500  4.2:1 ink  (fill only)
+       100 14.4:1 ink    600  5.5:1 white
+       200 11.9:1 ink    700  7.1:1 white   ← Primary
+       300  9.0:1 ink    800  9.0:1 white
+       400  6.2:1 ink    900 10.9:1 white
+                         950 15.9:1 white   ← Ink
+
+     To re-colour the whole app, change these eleven values and the :root
+     block above — nothing else in src/ writes a brand hex. */
+  --color-brand-50: #f4f5fd;
+  --color-brand-100: #e8eafb;
+  --color-brand-200: #d1d5f6;
+  --color-brand-300: #b1b8ef;
+  --color-brand-400: #8c95e4; /* the seed */
+  --color-brand-500: #6c76d5;
+  --color-brand-600: #5660c1;
+  --color-brand-700: #4650a6; /* Primary role */
+  --color-brand-800: #3b4388;
+  --color-brand-900: #323870;
+  --color-brand-950: #1c1f40; /* Ink role */
+
+  /* Accent is the seed. Its hover and active steps move down the ramp:
+     accent is a light fill carrying deep ink, so darker on press keeps ink
+     legible on it. */
+  --color-accent: #8c95e4;
+  --color-accent-hover: #7a84dd;
+  --color-accent-active: #6c76d5;
+
+  --color-success: #1fa35d;
+  --color-warn: #e89613;
+  --color-danger: #e23144;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-app font-sans text-ink antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-brand-700 outline-2 outline-offset-2;
+  }
+
+  ::selection {
+    @apply bg-brand-200;
+  }
+}
+
+@layer utilities {
+  /* Small uppercase label used across the design. */
+  .eyebrow {
+    @apply font-sans text-[11px] font-semibold tracking-[0.16em] uppercase;
+  }
+
+  /* A panel eases in rather than popping. */
+  .fade-in {
+    animation: fade-in 220ms ease-out both;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in {
+      animation: none;
+    }
+  }
+
+  .scrollbar-slim {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+
+  /* Number inputs inside the qty stepper drop the native spinners — the
+     stepper's own −/+ buttons are the control. */
+  .no-spin::-webkit-outer-spin-button,
+  .no-spin::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .no-spin {
+    -moz-appearance: textfield;
+  }
+}
+
+/* Invoices print as paper: the shell, header chrome and toasts drop out and
+   the sheet runs full width. */
+@media print {
+  body {
+    background: #fff;
+  }
+}
